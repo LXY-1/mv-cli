@@ -1,0 +1,4 @@
+# 忽略下面文件的检测
+node_modules/
+*.html
+build/*.js
