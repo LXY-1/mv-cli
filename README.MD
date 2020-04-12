@@ -18,8 +18,9 @@
    - eslint规则
    - 集成Mock.js，模拟交互过程，提升交互效率
    - 使用Pomise和async await 进行异步处理
-   - 自动部署
    - 自动化单元测试环境
+   - 打包、自动部署
+   
 
 #### 开发环境
   - vscode 安装webpack插件，快速生成配置文件
@@ -313,7 +314,7 @@ npm install vue-loader vue-template-compiler cache-loader thread-loader -D
 - 测试效果
 ![text](./test/testresult.png)
 - 简单搭建过程
-关于从0搭建自动化单元测试环境，可以看另一个github项目[link](),这里主要不同是它集成在项目里面作为项目框架的单元测试工具(不是很完善，但是vue项目基本够用，支持js模块以及.vue组件单元测试，只要会编写单元测试即可以)，除了支持使用es6\7\8\9这些特性编写的js模块进行单元测试之外，还支持.vue组件进行单元测试
+关于从0搭建自动化单元测试环境，可以看另一个github项目[link](https://github.com/LXY-1/auto-unit-test),这里主要不同是它集成在项目里面作为项目框架的单元测试工具(不是很完善，但是vue项目基本够用，支持js模块以及.vue组件单元测试，只要会编写单元测试即可以)，除了支持使用es6\7\8\9这些特性编写的js模块进行单元测试之外，还支持.vue组件进行单元测试
 - 踩坑
  vue.js 对`template`模板进行解析是使用`complai.js`，在单元测试封装的全局插件`util.js`导入的`Vue`指向了不带`complair.js`的`common.js`所以无法渲染我们传递的`template`模板。导致插件vue实例后无法通过`$em`获取dom元素。
 使用Istanbul插件统计代码覆盖率，在webpack以及karma.conf分别配置，但是接入vue组件单元测试后报错（测试js文件不会）查阅文档教程提示需要在`vue-loader`，`ooptios`选项配置如下

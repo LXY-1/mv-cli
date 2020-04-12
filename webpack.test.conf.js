@@ -65,7 +65,7 @@ module.exports = merge(webpackConfig, {
           }
 
         ]
-      }
+      },
 
       // 用 Istanbul 只监测业务代码,include是你需要测试的源码，通过它以及你最终测试脚本统计代码覆盖率
       // {
@@ -78,26 +78,18 @@ module.exports = merge(webpackConfig, {
       //   exclude: /node_modules|\.spec\.js$/,
       //   include: path.resolve('src')
       // },
-      // {
-      //   test: /\.vue$/,
-      //   use: [
-      //     {
-      //       loader: 'cache-loader'
-      //     },
-      //     {
-      //       loader: 'thread-loader'
-      //     },
-      //     {
-      //       loader: 'vue-loader',
-      //       options: {
-      //         compilerOptions: {
-      //           preserveWhitespace: false // 保留空白
-      //         },
-      //         loaders: {
-      //           'js': 'istanbul-instrumenter-loader' // 注意了，使用istanbul-instrumenter-loader收集代码覆盖率，需要对.vue文件单独配置js loader
-      //         }
-      //       }
-      //     }
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            js: 'babel-loader'
+          },
+          postLoaders: {
+            js: 'istanbul-instrumenter-loader?esModules=true'
+          }
+        }
+      }
       //   ]
       // }
     ]

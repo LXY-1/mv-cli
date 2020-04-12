@@ -4,7 +4,7 @@
  * @Author: lxw
  * @Date: 2020-04-10 21:45:48
  * @LastEditors: lxw
- * @LastEditTime: 2020-04-12 21:50:11
+ * @LastEditTime: 2020-04-12 22:30:06
  */
 // Karma configuration
 // Generated on Fri Apr 10 2020 21:45:48 GMT+0800 (GMT+08:00)
@@ -35,7 +35,8 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-chai',
       'karma-spec-reporter',
-      'karma-coverage'
+      // 'karma-coverage'
+      'karma-coverage-istanbul-reporter'
     ],
 
     // list of files / patterns to exclude
@@ -52,7 +53,7 @@ module.exports = function(config) {
     // karma运行我们启动浏览器之前对指定的文件进行预处理，这里我们使用的预处理器是webpack和coverage
     //
     preprocessors: {
-      'index.js': ['webpack', 'coverage'] // coverage用于生成测试覆盖率
+      'index.js': ['webpack'] // coverage用于生成测试覆盖率
     },
 
     webpack: webpackConfig,
@@ -66,15 +67,19 @@ module.exports = function(config) {
     // coverage是报告代码测试覆盖率。下面的coverageReporter配置也是coverage reporter的相关配置
     // 需要依赖插件；karma-spec-reporter，karma-coverage,可以查看插件的相关文档来了解
     // reporters: ['spec', 'coverage-istanbul'],
-    reporters: ['spec', 'coverage'],
-    coverageReporter: { // 配置参数移步：https://www.zybuluo.com/wangxingkang/note/790416
+    reporters: ['progress', 'coverage-istanbul'],
+    coverageIstanbulReporter: { // 配置参数移步：https://www.zybuluo.com/wangxingkang/note/790416
       dir: 'coverage',
-      reporters: [
-        { type: 'html', subdir: 'report-html' },
-        { type: 'lcov', subdir: 'report-lcov' },
-        { type: 'text-summary' }
-
-      ]
+      // 以什么格式, 这里设置了输出 html文件 ,info文件 ,及控制台
+      reports: ['html', 'lcovonly', 'text-summary'],
+      // 修正 weback 路径
+      fixWebpackSourcePaths: true,
+      // 将生成的html放到./coverage/html/下
+      'report-config': {
+        html: {
+          subdir: 'html'
+        }
+      }
 
     },
 
