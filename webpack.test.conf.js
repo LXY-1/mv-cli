@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @version:
+ * @Author: lxw
+ * @Date: 2020-04-11 22:07:38
+ * @LastEditors: lxw
+ * @LastEditTime: 2020-04-13 00:48:51
+ */
 
 'use strict'
 
@@ -65,7 +73,7 @@ module.exports = merge(webpackConfig, {
           }
 
         ]
-      },
+      }
 
       // 用 Istanbul 只监测业务代码,include是你需要测试的源码，通过它以及你最终测试脚本统计代码覆盖率
       // {
@@ -74,22 +82,10 @@ module.exports = merge(webpackConfig, {
       //     loader: 'istanbul-instrumenter-loader',
       //     options: { esModules: true } // 使其支持es2015 的mudule语法
       //   },
-      //   enforce: 'post', // 使用babel，You must run the instrumentation as a post step
+      //   enforce: 'post', // 使用qbabel，You must run the instrumentation as a post step
       //   exclude: /node_modules|\.spec\.js$/,
       //   include: path.resolve('src')
       // },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            js: 'babel-loader'
-          },
-          postLoaders: {
-            js: 'istanbul-instrumenter-loader?esModules=true'
-          }
-        }
-      }
       //   ]
       // }
     ]

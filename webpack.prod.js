@@ -44,12 +44,15 @@ module.exports = merge(webpackConfig, {
         test: /\.css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader // 提取到一个css文件
+            loader: MiniCssExtractPlugin.loader, // 提取到一个css文件
+            options: {
+              publicPath: '../' // 配置css url属性，前面添加一个层级，用于找到字体等资源
+            }
           },
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 2
+              importLoaders: 4
             }
           },
           {
@@ -67,12 +70,15 @@ module.exports = merge(webpackConfig, {
         test: /\.less$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader // 提取到一个css文件
+            loader: MiniCssExtractPlugin.loader, // 提取到一个css文件,
+            options: {
+              publicPath: '../' // 配置css url属性，前面添加一个层级，用于找到字体等资源
+            }
           },
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 2
+              importLoaders: 4
             }
           },
           {
@@ -91,13 +97,11 @@ module.exports = merge(webpackConfig, {
       }
     ]
   },
-  resolve: {
-  },
-  devtool: '#source-map',
+  devtool: 'cheap-module-source-map', // 生产环境下建议采用这个
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: 'production'
+        NODE_ENV: JSON.stringify('production') // 注：需要把js字符串转为json字符串格式
       }
     }),
     new MiniCssExtractPlugin({

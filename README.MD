@@ -1,14 +1,30 @@
 
 #### 手动实现简易vue-cli项目骨架
 
-#### 目标，通过webpack4.x，集成相关自动化需要的工具、接入项目业务逻辑需要的相关插件、制定目录、文件、代码开发规范，实现以下问题
+#### 启用
+```
+开发环境:
+npm run dev
+
+打包生产环境:
+npm run build
+
+打包后自动部署到服务器
+npm run deploy
+
+单元测试
+npm run test
+```
+
+#### 目标
+通过webpack4.x，集成相关自动化需要的工具、接入项目业务逻辑需要的相关插件；制定目录、文件、代码开发规范。主要实现以下功能
    - ES6/7/8/9等高级语法转换成ES5
    - stylus/less/scss等css预处理器转换成css
    - 解析字体font、图片(jpg、png...)等静态资源,打包生成静态资源文件夹存放静态资源
    - 压缩js、css等文件，打包生成css文件夹存放压缩压缩过css文件
    - 自动添加css各大浏览器厂商前缀
-   - 定义环境变量env :多环境的打包区分.env
-   - 抽离公共代码 : TODO:
+   - 定义环境变量env :多环境的打包区分.env、区分生产环境、开发环境做相应配置，如全局请求接口前缀（TODO:）
+   - 抽离公共代码 
    - 项目热更新和懒加载
    - 使用webpck-merge将wepack的配置分成两个模式(dev|prod)+一个基础模式(common)，共三个配置文件，其中webpack.common.js由dev和prod配置文件分贝共享
    - 每次打包删除上一次打包记录
@@ -260,7 +276,16 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 
 ---
 
-到这里我们打包可以生成带有index.html文件的dist目录了，然后看看我们的webpack.config.js也越来越大了。此时我们也没有怎么区分开发环境和生成环境下的不同配置，接下来就是根据开发环境和生产环境的不同需求，分别创建webpack配置文件
+到这里我们打包可以生成带有index.html文件的dist目录了，然后看看我们的webpack.config.js也越来越大了。此时我们也没有怎么区分开发环境和生成环境下的不同配置，接下来就是根据开发环境和生产环境的不同需求，分别创建webpack配置文件,一以及对应的相关环境变量(项目全局变量)的配置文件，比如`dev.env.js`配置开发环境需要的环境变量对象，导出到`webpack.dev.js`利用`webpack.definePlugin`来创建环境变量，当然如果你项目涉及的环境变量不是很多，开发与生产环境没有太多的区别，也可以不用额外创建环境变量的配置文件，直接在对应的webpack配置文件使用`webpack.definePlugin`插件定义即可，比如生产环境我只需要可以判断是生产环境即可，那就赋值 `process_env` 一个带说明的对象即可，如下
+```js
+ new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production') // 注：需要把js字符串转为json字符串格式
+      }
+    }),
+```
+我们在项目中使用`process.env.NODE_ENV`就可以访问到了
+
 
 使用webpack-merge将配置文件拆分为3个文件
 - webpack.common.js:  
@@ -278,6 +303,36 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
     "dev": "webpack-dev-server --config ./webpack.dev.js"
   },
 ```
+注意在在使用`webpack`的`definePlugin`创建项目的全局变量（即环境变量）的时候，需要给`NODE_ENV`赋值json字符串而不是字符串,如下所示
+```js
+ new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production') // 注：需要把js字符串转为json字符串格式
+      }
+    }),
+```
+如果是要区分开的话，可以这样使用
+`dev.env.js`
+```js
+module.exports = {
+
+  NODE_ENV: '"development"',
+
+  ENV_CONFIG: '"dev"',
+
+  BASE_API: '"https://api-dev"'
+
+}
+```
+`webpack.dev.js`
+```js
+new webpack.DefinePlugin({
+
+      'process.env': require('../config/dev.env')
+
+    })；
+```
+
 
 9. webpack识别.vue文件实现
 > 目前绝大多数的vue项目里核心业务代码都是.vue文件结尾的，但浏览器不支持对.vue文件的解析，故需webpack将.vue文件转换为浏览器能识别的js文件。
@@ -324,7 +379,7 @@ npm install vue-loader vue-template-compiler cache-loader thread-loader -D
  }
 ```
 配置好了之后，覆盖率可以正确显示了，但是与`vue-loader`加载器发生冲突，import的.vue组件无法被正常解析成一个vue组件对象Component，尝试无果，打算换一种生成覆盖率的方式。
-6. 关于Mocha、Chai
+- 关于Mocha、Chai
 mocha是前端自动化测试框架，提供了不同风格断言库的兼容，测试用例分组，同步、异步测试架构，生命周期钩子等能力。
 ```js
 describe('功能测试',function(){
@@ -356,12 +411,25 @@ describe('功能测试',function(){
     });
 })
 ```
-Mocha测试框架不包括断言，所以使用Chai作为断言库，支持expect，assert、should断言语法
+- Mocha测试框架不包括断言，所以使用Chai作为断言库，支持expect，assert、should断言语法
 ```js
 expect(bar).to.not.exist;// 断言变量bar不存在
 expect(data).to.have.ownProperty('length');// 断言data有length属性
 expect(name).to.be.a('string');// 断言name是一个字符串
 assert.equal(value1,value2);// 断言value1和value2相等
+```
+
+12 打包资源路径问题
+- 使用`MiniCssExtractPlugin`将css单独打包成一个文件，存放在css目录里面，导致css里面引入图片、字体资源路径出现错误
+> 原因是使用`MiniCssExtractPlugin`打包之后，在css文件里面通过url属性引用的资源路径是同级路径，但是打包生成的css是存放在css目录里面，而相关的资源目录是存放在css目录外部，所以导致无法获取通过url引入的字体图标等资源
+> 解决办法，既然是插件问题，自然从插件本身入手解决，`MiniCssExtractPlugin`插件支持修改url属性的路径的，通过配置`MiniCSSExtractPlugin.loader`的`publicPath`即可,如下，差几个目录层级就添加几个'../'
+```js
+ {
+    loader: MiniCssExtractPlugin.loader, // 提取到一个css文件,
+    options: {
+        publicPath: '../' // 配置css url属性，前面添加一个层级，用于找到字体等资源
+    }
+},
 ```
 
 

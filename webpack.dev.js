@@ -4,7 +4,7 @@
  * @Author: lxw
  * @Date: 2020-04-08 16:32:00
  * @LastEditors: lxw
- * @LastEditTime: 2020-04-11 22:30:24
+ * @LastEditTime: 2020-04-13 11:57:40
  */
 
 'use strict'
@@ -79,7 +79,7 @@ module.exports = merge(webpackConfig, {
       }
     ]
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-eval-source-map', // 开发环境下建议采用这个,方便调试，可以定位到指定行
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热加载
 
@@ -95,7 +95,8 @@ module.exports = merge(webpackConfig, {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        VUE_APP_BASE_URL: JSON.stringify('http://localhsot:8084')
+        VUE_APP_BASE_URL: JSON.stringify('http://localhsot:8084'),
+        NODE_ENV: JSON.stringify('development')
       }
     })
   ]

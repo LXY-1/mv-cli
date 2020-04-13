@@ -1,3 +1,11 @@
+<!--
+ * @Description:
+ * @version:
+ * @Author: lxw
+ * @Date: 2020-04-08 23:55:19
+ * @LastEditors: lxw
+ * @LastEditTime: 2020-04-13 12:30:08
+ -->
 
 <template>
   <div class="menu">
@@ -12,7 +20,7 @@
       @select="handleSelect"
     >
       <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.path"><i :class="item.icon" /> {{ item.name }} </el-menu-item>
-      <el-menu-item index="4" class="right"><a href="https://www.ele.me" target="_blank">源码<i class="el-icon-link" /></a></el-menu-item>
+      <el-menu-item index="4" class="right"><a href="https://github.com/LXY-1/mv-cli" target="_blank"><i class="el-icon-link" /> 源码</a></el-menu-item>
     </el-menu>
   </div>
 </template>

@@ -4,7 +4,7 @@
  * @Author: lxw
  * @Date: 2020-04-08 22:40:39
  * @LastEditors: lxw
- * @LastEditTime: 2020-04-11 21:48:24
+ * @LastEditTime: 2020-04-13 11:59:52
  -->
 <template>
   <div class="about text-center">
@@ -26,7 +26,7 @@
       <p>webpack识别.vue文件，实现.vue文件开发vue项目</p>
       <p>目录、文件规范，结构、命名、全局复用文件等</p>
       <p>集成VueRouter，封装配置实现路由权限控制</p>
-      <p>集成Vuex,封装，实现全局姿态管理</p>
+      <p>集成Vuex,封装，实现全局状态管理</p>
       <p>接入eslint插件，配置代码开发规范</p>
       <p>集成Mock.js，模拟交互过程，提升交互效率</p>
       <p>接入和配置axious，用于项目调用后台接口</p>
