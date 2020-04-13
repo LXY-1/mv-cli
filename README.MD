@@ -36,7 +36,7 @@ npm run test
    - 使用Pomise和async await 进行异步处理
    - 自动化单元测试环境
    - 打包、自动部署
-   
+
 
 #### 开发环境
   - vscode 安装webpack插件，快速生成配置文件
@@ -65,10 +65,11 @@ npm run test
 由于生产环境、开发环境webpack的配置不同，虽然可以利用写一个配置文件利用PROCESS_NODE_ENV区别，但是项目变大的话，配置文件代码也会越来越多，区别的地方也会越来越多，不好维护，所以分别创建：common/dev/prod三个webpack配置文件，在packjson里面分别使用不同的打包命令来执行不同的配置文件
 2. 构建vue单页面应用程序集成vueRouter还有Vuex
 
-
 #### 搭建过程
 
-- 配置初期,build/webpack.config.js走天下
+ps:临时的笔记，还没整理，写得比较乱，大体是搭建配置相关工作，一些细节的优化，还有一些出错的处理、解决方案
+
+- 配置初期, 仅仅使用`build/webpack.config.js`一个配置文件走天下
 
   1. 配置babel，安装如下模块
   ```
@@ -364,7 +365,8 @@ npm install vue-loader vue-template-compiler cache-loader thread-loader -D
 
 11. 自动化单元测试环境
 > 实现类似vue那样的自动化单元测试环境，对`.js`、`.vue`组件进行自动化单元测试
-- 工具链：Karma + Phantom + Mocha  + Chai + 接入webpack（webpack用于打包，并将打包后的源码交给karma进行单元测试）
+>
+> - 工具链：Karma + Phantom + Mocha  + Chai + 接入webpack（webpack用于打包，并将打包后的源码交给karma进行单元测试）
 - Element的单元测试工具Util.js
 - 测试效果
 ![text](./test/testresult.png)
